@@ -42,8 +42,11 @@ def check_new_symbols(symbols):
         update_symbols(updated_symbols)
 
 
+def heartbeat_check():
+    telebot.send_check_message("HEARTBEAT CHECK!")
+
+
 def main():
-    start_time = time.time()
     result = spot_client.exchange_info()
     symbols = result['data']['symbols']
     used_weight = result['limit_usage']['x-mbx-used-weight-1m']
@@ -54,15 +57,10 @@ def main():
         check_new_symbols(symbols)
     else:
         write_symbols(symbols)
-    print(f'runtime:{time.time() - start_time} seconds')
-
-
-def heartbeat_check():
-    telebot.send_check_message("HEARTBEAT CHECK!")
 
 
 schedule.every().second.do(main)
-schedule.every().hours(8).do(heartbeat_check)
+schedule.every(8).hours.do(heartbeat_check)
 
 while True:
     schedule.run_pending()
