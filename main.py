@@ -59,7 +59,8 @@ def main():
         write_symbols(symbols)
 
 
-schedule.every().second.do(main)
+main()
+schedule.every().hour.do(main)
 schedule.every(8).hours.do(heartbeat_check)
 
 while True:
